@@ -1,0 +1,55 @@
+<nav class="navbar navbar-light navbar-bg-red py-3">
+  <a class="navbar-brand">
+    <img src="../assets/images/logo.png" alt="logo">
+  </a>
+</nav>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-6">
+      <select class="custom-select" id="inputGroupSelect02" name="selectedResponsible" [(ngModel)]="selectedResponsible" (change)="onSelectType()">
+        <option selected>Seleccione un responsable</option>
+        <option value="101">101</option>
+        <option value="102">102</option>
+        <option value="103">103</option>
+      </select>
+    </div>
+  </div>
+  <div class="row my-5">
+    <div class="col-12">
+      <p-table [value]="data">
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="text-center">Id</th>
+            <th class="text-center">Responsable</th>
+            <th class="text-center">Estado</th>
+            <th class="text-center">Usuario Creacion</th>
+            <th class="text-center">Fecha/Hora Inicio</th>
+            <th class="text-center">Fecha/Hora Fin</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-dat>
+          <tr>
+            <td class="text-center">{{ dat.evaluacionId }}</td>
+            <td>{{ dat.servidorResponsableId }}</td>
+            <td>{{ dat.estadoEvaluacion }}</td>
+            <td>{{ dat.usuarioCreacion }}</td>
+            <td class="text-center">{{ dat.fechaHoraInicio | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+            <td class="text-center">{{ dat.fechaHoraFin | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+            <td class="text-center">
+              <button type="button" (click)="openModalInfo()" class="pi pi-eye"></button>
+              <button type="button" class="pi pi-play"></button>
+              <button type="button" class="pi pi-trash"></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>
+
+<p-dialog header="Title" [(visible)]="display" [modal]="true">
+  <h1>Hola Mundo</h1>
+</p-dialog>
+
+
