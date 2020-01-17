@@ -21,6 +21,8 @@ import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import { AppComponent } from './app.component';
 
+import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
+
 @NgModule({
   declarations: [
     AppComponent
@@ -40,7 +42,8 @@ import { AppComponent } from './app.component';
     PaginatorModule,
     ConfirmDialogModule,
     ToastModule,
-    TooltipModule
+    TooltipModule,
+    Ng4LoadingSpinnerModule
   ],
   providers: [
     EvaluacionService,

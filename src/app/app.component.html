@@ -57,64 +57,69 @@
   </div>
 </div>
 
-<p-dialog header="Ver Resultados" [(visible)]="display" [modal]="true" [style]="">
-  <p-dataView [value]="data2">
-    <ng-template let-dat pTemplate="listItem">
-      <p-panel>
-        <p-header>
-          {{dat.pregunta}}
-        </p-header>
-        <div class="ui-g" style="width:250px;margin-bottom:10px">
-          <div class="ui-g-12">
-            A) <p-radioButton disabled name="{{dat.evaluacionRespuestaId}}" value="10000" label="{{dat.alternativa1}}"
+<p-dialog [(visible)]="display" [modal]="true" [style]="{'minWidth': '250px'}">
+  <p-header>
+    <h5 class="font-weight-bold d-inline-block">Ver Resultados</h5>
+  </p-header>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12 col-md-4 offset-md-4">
+        <div class="card my-3" *ngFor="let dat of data2">
+          <div class="card-header">
+            <p>{{dat.pregunta}}</p>
+          </div>
+          <div class="row px-5 py-3">
+            <div class="ui-g-12">
+              A) <p-radioButton disabled name="{{dat.evaluacionRespuestaId}}" value="10000" label="{{dat.alternativa1}}"
               [(ngModel)]="dat.helper" inputId="alternativa1">
-            </p-radioButton>
+              </p-radioButton>
+            </div>
+            <div class="ui-g-12">
+              B) <p-radioButton disabled name="{{dat.evaluacionRespuestaId}}" value="01000" label="{{dat.alternativa2}}"
+                [(ngModel)]="dat.helper" inputId="alternativa2">
+              </p-radioButton>
+            </div>
+            <div class="ui-g-12">
+              C) <p-radioButton disabled name="{{dat.evaluacionRespuestaId}}" value="00100" label="{{dat.alternativa3}}"
+                [(ngModel)]="dat.helper" inputId="alternativa3">
+              </p-radioButton>
+            </div>
+            <div class="ui-g-12">
+              D) <p-radioButton disabled name="{{dat.evaluacionRespuestaId}}" value="00010" label="{{dat.alternativa4}}"
+                [(ngModel)]="dat.helper" inputId="alternativa4">
+              </p-radioButton>
+            </div>
+            <div class="ui-g-12">
+              E) <p-radioButton disabled name="{{dat.evaluacionRespuestaId}}" value="00001" label="{{dat.alternativa5}}"
+                [(ngModel)]="dat.helper" inputId="alternativa5">
+              </p-radioButton>
+            </div>
           </div>
-          <div class="ui-g-12">
-            B) <p-radioButton disabled name="{{dat.evaluacionRespuestaId}}" value="01000" label="{{dat.alternativa2}}"
-              [(ngModel)]="dat.helper" inputId="alternativa2">
-            </p-radioButton>
-          </div>
-          <div class="ui-g-12">
-            C) <p-radioButton disabled name="{{dat.evaluacionRespuestaId}}" value="00100" label="{{dat.alternativa3}}"
-              [(ngModel)]="dat.helper" inputId="alternativa3">
-            </p-radioButton>
-          </div>
-          <div class="ui-g-12">
-            D) <p-radioButton disabled name="{{dat.evaluacionRespuestaId}}" value="00010" label="{{dat.alternativa4}}"
-              [(ngModel)]="dat.helper" inputId="alternativa4">
-            </p-radioButton>
-          </div>
-          <div class="ui-g-12">
-            E) <p-radioButton disabled name="{{dat.evaluacionRespuestaId}}" value="00001" label="{{dat.alternativa5}}"
-              [(ngModel)]="dat.helper" inputId="alternativa5">
-            </p-radioButton>
+          <div class="card-footer">
+              Respuesta Correcta:
+              <li class="d-inline-block" *ngIf="dat.solucion == '10000'">
+                A
+              </li>
+              <li class="d-inline-block" *ngIf="dat.solucion == '01000'">
+                B
+              </li>
+              <li class="d-inline-block" *ngIf="dat.solucion == '00100'">
+                C
+              </li>
+              <li class="d-inline-block" *ngIf="dat.solucion == '00010'">
+                D
+              </li>
+              <li class="d-inline-block" *ngIf="dat.solucion == '00001'">
+                E
+              </li>
           </div>
         </div>
-        <p-footer>
-          Respuesta Correcta:
-          <li *ngIf="dat.solucion == '10000'">
-            A
-          </li>
-          <li *ngIf="dat.solucion == '01000'">
-            B
-          </li>
-          <li *ngIf="dat.solucion == '00100'">
-            C
-          </li>
-          <li *ngIf="dat.solucion == '00010'">
-            D
-          </li>
-          <li *ngIf="dat.solucion == '00001'">
-            E
-          </li>
-        </p-footer>
-      </p-panel>
-    </ng-template>
-  </p-dataView>
+      </div>
+    </div>
+  </div>
 </p-dialog>
 
-<p-dialog header="Rendir Evaluación" [(visible)]="display2" [modal]="true">
+<p-dialog header="Rendir Evaluación" [(visible)]="display2" [modal]="true" [closable]="false">
   <p-button label="Finalizar Evaluación" (onClick)="finalizarEvaluacion(evaluacionId)"></p-button>
   <p-dataView [value]="data2">
     <ng-template let-dat pTemplate="listItem">

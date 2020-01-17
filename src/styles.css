@@ -2,6 +2,12 @@
     background-color: #A70400;
 }
 
+body .ui-dialog .ui-dialog-title { color: #007ad9; }
 body .ui-dialog .ui-dialog-footer { text-align: center !important; }
+body .ui-dialog .card-footer li { list-style-type: none; }
 
 body .ui-paginator { background-color: #fff; border: none; margin-top: 3rem; }
+
+.fw-600 {
+  
+}
