@@ -16,7 +16,6 @@ export class AppComponent {
   selectedResponsible: string = ""
   EvaluacionesData: EvaluacionesData []
   data: EvaluacionesData []
-  variableId: string = 
   
   onSelectType() {
     this._evaluacionService.getEvaluaciones(this.selectedResponsible).subscribe(res => 
@@ -24,7 +23,6 @@ export class AppComponent {
         this.data = res['payload']['items']
         this.selectedResponsible = this.data['servidorResponsableId']
       });
-    console.log(this.data)
   }
 
   openModalInfo() {
