@@ -14,6 +14,8 @@ import { ButtonModule } from 'primeng/button';
 import { PaginatorModule } from 'primeng/paginator';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
+import { TooltipModule } from 'primeng/tooltip';
+
 import { EvaluacionService } from './services/evaluacion.service'
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
@@ -37,7 +39,8 @@ import { AppComponent } from './app.component';
     ButtonModule,
     PaginatorModule,
     ConfirmDialogModule,
-    ToastModule
+    ToastModule,
+    TooltipModule
   ],
   providers: [
     EvaluacionService,
