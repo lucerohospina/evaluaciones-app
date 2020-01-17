@@ -7,9 +7,16 @@ import { FormsModule } from '@angular/forms'
 import { TableModule } from 'primeng/table'
 import { DropdownModule } from 'primeng/dropdown'
 import { DialogModule } from 'primeng/dialog'
-
+import { DataViewModule } from 'primeng/dataview';
+import { PanelModule } from 'primeng/panel';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { ButtonModule } from 'primeng/button';
+import { PaginatorModule } from 'primeng/paginator';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToastModule } from 'primeng/toast';
 import { EvaluacionService } from './services/evaluacion.service'
-
+import { ConfirmationService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { AppComponent } from './app.component';
 
 @NgModule({
@@ -23,10 +30,19 @@ import { AppComponent } from './app.component';
     FormsModule,
     TableModule,
     DropdownModule,
-    DialogModule
+    DialogModule,
+    DataViewModule,
+    PanelModule,
+    RadioButtonModule,
+    ButtonModule,
+    PaginatorModule,
+    ConfirmDialogModule,
+    ToastModule
   ],
   providers: [
-    EvaluacionService
+    EvaluacionService,
+    ConfirmationService,
+    MessageService
   ],
   bootstrap: [AppComponent]
 })

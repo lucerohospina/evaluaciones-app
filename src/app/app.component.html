@@ -6,17 +6,21 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-6">
-      <select class="custom-select" id="inputGroupSelect02" name="selectedResponsible" [(ngModel)]="selectedResponsible" (change)="onSelectType()">
-        <option selected>Seleccione un responsable</option>
+      <select class="custom-select" name="selectedResponsible" [(ngModel)]="selectedResponsible"
+        (change)="listarEvaluaciones()">
+        <option>Seleccione un responsable</option>
         <option value="101">101</option>
         <option value="102">102</option>
         <option value="103">103</option>
       </select>
     </div>
+    <div class="col-6">
+      <p-button label="Nuevo" (onClick)="confirmarCrearEvaluacion()"></p-button>
+    </div>
   </div>
   <div class="row my-5">
     <div class="col-12">
-      <p-table [value]="data">
+      <p-table [paginator]="true" [rows]="10" [value]="data">
         <ng-template pTemplate="header">
           <tr>
             <th class="text-center">Id</th>
@@ -37,9 +41,11 @@
             <td class="text-center">{{ dat.fechaHoraInicio | date:'dd/MM/yyyy HH:mm:ss' }}</td>
             <td class="text-center">{{ dat.fechaHoraFin | date:'dd/MM/yyyy HH:mm:ss' }}</td>
             <td class="text-center">
-              <button type="button" (click)="openModalInfo()" class="pi pi-eye"></button>
-              <button type="button" class="pi pi-play"></button>
-              <button type="button" class="pi pi-trash"></button>
+              <button *ngIf="dat.estadoEvaluacion == 'F'" type="button" (click)="verEvaluacion(dat.evaluacionId)"
+                class="pi pi-eye"></button>
+              <button *ngIf="dat.estadoEvaluacion == 'R'" type="button" (click)="confirmarIniciarEvaluacion(dat.evaluacionId)"
+                class="pi pi-play"></button>
+              <button class="pi pi-trash" (click)="confirmarEliminarEvaluacion(dat.evaluacionId)" type="button"></button>
             </td>
           </tr>
         </ng-template>
@@ -48,8 +54,110 @@
   </div>
 </div>
 
-<p-dialog header="Title" [(visible)]="display" [modal]="true">
-  <h1>Hola Mundo</h1>
+<p-dialog header="Ver Resultados" [(visible)]="display" [modal]="true">
+  <p-dataView [value]="data2">
+    <ng-template let-dat pTemplate="listItem">
+      <p-panel>
+        <p-header>
+          {{dat.pregunta}}
+        </p-header>
+        <div class="ui-g" style="width:250px;margin-bottom:10px">
+          <div class="ui-g-12">
+            A) <p-radioButton disabled name="{{dat.evaluacionRespuestaId}}" value="10000" label="{{dat.alternativa1}}"
+              [(ngModel)]="dat.helper" inputId="alternativa1">
+            </p-radioButton>
+          </div>
+          <div class="ui-g-12">
+            B) <p-radioButton disabled name="{{dat.evaluacionRespuestaId}}" value="01000" label="{{dat.alternativa2}}"
+              [(ngModel)]="dat.helper" inputId="alternativa2">
+            </p-radioButton>
+          </div>
+          <div class="ui-g-12">
+            C) <p-radioButton disabled name="{{dat.evaluacionRespuestaId}}" value="00100" label="{{dat.alternativa3}}"
+              [(ngModel)]="dat.helper" inputId="alternativa3">
+            </p-radioButton>
+          </div>
+          <div class="ui-g-12">
+            D) <p-radioButton disabled name="{{dat.evaluacionRespuestaId}}" value="00010" label="{{dat.alternativa4}}"
+              [(ngModel)]="dat.helper" inputId="alternativa4">
+            </p-radioButton>
+          </div>
+          <div class="ui-g-12">
+            E) <p-radioButton disabled name="{{dat.evaluacionRespuestaId}}" value="00001" label="{{dat.alternativa5}}"
+              [(ngModel)]="dat.helper" inputId="alternativa5">
+            </p-radioButton>
+          </div>
+        </div>
+        <p-footer>
+          Respuesta Correcta:
+          <li *ngIf="dat.solucion == '10000'">
+            A
+          </li>
+          <li *ngIf="dat.solucion == '01000'">
+            B
+          </li>
+          <li *ngIf="dat.solucion == '00100'">
+            C
+          </li>
+          <li *ngIf="dat.solucion == '00010'">
+            D
+          </li>
+          <li *ngIf="dat.solucion == '00001'">
+            E
+          </li>
+        </p-footer>
+      </p-panel>
+    </ng-template>
+  </p-dataView>
 </p-dialog>
 
-
+<p-dialog header="Rendir Evaluación" [(visible)]="display2" [modal]="true">
+  <p-button label="Finalizar Evaluación" (onClick)="finalizarEvaluacion(evaluacionId)"></p-button>
+  <p-dataView [value]="data2">
+    <ng-template let-dat pTemplate="listItem">
+      <p-panel>
+        <p-header>
+          {{dat.pregunta}}
+        </p-header>
+        <div class="ui-g" style="width:250px;margin-bottom:10px">
+          <div class="ui-g-12">
+            A) <p-radioButton (click)="marcarRespuesta(dat.evaluacionRespuestaId, '10000')"
+              name="{{dat.evaluacionRespuestaId}}" value="10000" label="{{dat.alternativa1}}" [(ngModel)]="dat.helper"
+              inputId="alternativa1">
+            </p-radioButton>
+          </div>
+          <div class="ui-g-12">
+            B) <p-radioButton (click)="marcarRespuesta(dat.evaluacionRespuestaId, '01000')"
+              name="{{dat.evaluacionRespuestaId}}" value="01000" label="{{dat.alternativa2}}" [(ngModel)]="dat.helper"
+              inputId="alternativa2">
+            </p-radioButton>
+          </div>
+          <div class="ui-g-12">
+            C) <p-radioButton (click)="marcarRespuesta(dat.evaluacionRespuestaId, '00100')"
+              name="{{dat.evaluacionRespuestaId}}" value="00100" label="{{dat.alternativa3}}" [(ngModel)]="dat.helper"
+              inputId="alternativa3">
+            </p-radioButton>
+          </div>
+          <div class="ui-g-12">
+            D) <p-radioButton (click)="marcarRespuesta(dat.evaluacionRespuestaId, '00010')"
+              name="{{dat.evaluacionRespuestaId}}" value="00010" label="{{dat.alternativa4}}" [(ngModel)]="dat.helper"
+              inputId="alternativa4">
+            </p-radioButton>
+          </div>
+          <div class="ui-g-12">
+            E) <p-radioButton (click)="marcarRespuesta(dat.evaluacionRespuestaId, '00001')"
+              name="{{dat.evaluacionRespuestaId}}" value="00001" label="{{dat.alternativa5}}" [(ngModel)]="dat.helper"
+              inputId="alternativa5">
+            </p-radioButton>
+          </div>
+        </div>
+      </p-panel>
+    </ng-template>
+  </p-dataView>
+</p-dialog>
+<p-confirmDialog #cd header="Confirmación" icon="pi pi-exclamation-triangle">
+  <p-footer>
+    <button type="button" pButton icon="pi pi-times" label="No" (click)="cd.reject()"></button>
+    <button type="button" pButton icon="pi pi-check" label="Si" (click)="cd.accept()"></button>
+  </p-footer>
+</p-confirmDialog>
