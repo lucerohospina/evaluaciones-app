@@ -16,7 +16,8 @@ export class AppComponent {
   ResponsablesData: ResponsablesData[];
   display: boolean = false
   display2: boolean = false
-  selectedResponsible: ResponsablesData
+  //selectedResponsible: ResponsablesData
+  selectedResponsible: string = ""
   EvaluacionesData: EvaluacionesData[]
   data: EvaluacionesData[]
   PreguntasData: PreguntasData[]
