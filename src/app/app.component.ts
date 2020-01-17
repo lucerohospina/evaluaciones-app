@@ -28,8 +28,8 @@ export class AppComponent {
   
   constructor(private _evaluacionService: EvaluacionService, 
               private confirmationService: ConfirmationService, 
-              private messageService: MessageService) { },
-              private _ng4LoadingSpinnerService: Ng4LoadingSpinnerService
+              private messageService: MessageService,
+              private _ng4LoadingSpinnerService: Ng4LoadingSpinnerService) { }
   
   listarEvaluaciones(event) {
     this._evaluacionService.listarEvaluaciones(this.selectedResponsible).subscribe(res => {
