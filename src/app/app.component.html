@@ -8,10 +8,10 @@
     <div class="col-12 text-center">
       <select class="custom-select w-25" name="selectedResponsible" [(ngModel)]="selectedResponsible"
         (change)="listarEvaluaciones()">
-        <option value="">Seleccione</option>
-        <option value="101">101</option>
-        <option value="102">102</option>
-        <option value="103">103</option>
+        <option value="">Seleccione un responsable</option>
+        <option value="101">WILBER APCHO MONTES</option>
+        <option value="102">JOSE ANTONIO HUALLANCA AYALA</option>
+        <option value="103">MERLY EDITH ROSILLO LLACSAHUANGA</option>
       </select>
       <p-button class="ml-3" label="Nuevo" (onClick)="confirmarCrearEvaluacion()"></p-button>
     </div>
@@ -33,17 +33,22 @@
         <ng-template pTemplate="body" let-dat>
           <tr>
             <td class="text-center">{{ dat.evaluacionId }}</td>
-            <td>{{ dat.servidorResponsableId }}</td>
-            <td>{{ dat.estadoEvaluacion }}</td>
-            <td>{{ dat.usuarioCreacion }}</td>
+            <td *ngIf="dat.servidorResponsableId == '101'">WILBER APCHO MONTES</td>
+            <td *ngIf="dat.servidorResponsableId == '102'">JOSE ANTONIO HUALLANCA AYALA</td>
+            <td *ngIf="dat.servidorResponsableId == '103'">MERLY EDITH ROSILLO LLACSAHUANGA</td>
+            <td *ngIf="dat.estadoEvaluacion == 'R'">REGISTRADO</td>
+            <td *ngIf="dat.estadoEvaluacion == 'I'">INICIADO</td>
+            <td *ngIf="dat.estadoEvaluacion == 'F'">FINALIZADO</td>
+            <td >{{ dat.usuarioCreacion }}</td >
             <td class="text-center">{{ dat.fechaHoraInicio | date:'dd/MM/yyyy HH:mm:ss' }}</td>
             <td class="text-center">{{ dat.fechaHoraFin | date:'dd/MM/yyyy HH:mm:ss' }}</td>
             <td class="text-center">
-              <button *ngIf="dat.estadoEvaluacion == 'F'" type="button" (click)="verEvaluacion(dat.evaluacionId)"
-                class="pi pi-eye"></button>
-              <button *ngIf="dat.estadoEvaluacion == 'R'" type="button" (click)="confirmarIniciarEvaluacion(dat.evaluacionId)"
-                class="pi pi-play"></button>
-              <button class="pi pi-trash" (click)="confirmarEliminarEvaluacion(dat.evaluacionId)" type="button"></button>
+              <button type="button" (click)="verEvaluacion(dat.evaluacionId)" class="pi pi-eye"
+                [disabled]="dat.estadoEvaluacion != 'F'"></button>
+              <button type="button" (click)="confirmarIniciarEvaluacion(dat.evaluacionId)" class="pi pi-play"
+                [disabled]="dat.estadoEvaluacion != 'R'"></button>
+              <button class="pi pi-trash" (click)="confirmarEliminarEvaluacion(dat.evaluacionId)"
+                type="button"></button>
             </td>
           </tr>
         </ng-template>
