@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, ErrorHandler } from '@angular/core'
 import { EvaluacionService } from './services/evaluacion.service'
 import { EvaluacionesData } from './models/evaluaciones'
 import { PreguntasData } from './models/preguntas'
 import { ResponsablesData } from './models/responsables'
 import { ConfirmationService } from 'primeng/api'
 import { MessageService } from 'primeng/api'
+import { HttpErrorResponse } from '@angular/common/http'
 
 @Component({
   selector: 'app-root',
@@ -50,9 +51,15 @@ export class AppComponent {
   }
 
   crearEvaluacion() {
-    this._evaluacionService.crearEvaluacion(this.selectedResponsible).subscribe(res => this.data = res['payload']['items']);
-    console.log('Evaluación creada correctamente');
-    this.messageService.add({severity:'success', summary: 'Mensaje de éxito', detail:'Evaluación creada correctamente'});
+    this._evaluacionService.crearEvaluacion(this.selectedResponsible).subscribe(
+      res => {
+        this._evaluacionService.listarEvaluaciones(this.selectedResponsible);
+        this.messageService.add({ severity: 'success', summary: 'Mensaje de éxito', detail: 'Evaluación ' + res['payload']['evaluacionId'] + ' creada correctamente' })
+      },
+      (error: HttpErrorResponse) => {
+        this.messageService.add({ severity: 'error', summary: 'Mensaje de error', detail: error.error.status.error.messages })
+      }
+    );
   }
 
   confirmarIniciarEvaluacion(evaluacionId) {
@@ -65,12 +72,17 @@ export class AppComponent {
   }
 
   iniciarEvaluacion(evaluacionId) {
-    this._evaluacionService.iniciarEvaluacion(evaluacionId).subscribe(res => {
-      this.data2 = res['payload']['items']
-    });
-    this.display2 = true
-    this.evaluacionId = evaluacionId
-    console.log('Evaluación iniciada correctamente');
+    this._evaluacionService.iniciarEvaluacion(evaluacionId).subscribe(
+      res => {
+        this.data2 = res['payload']['items']
+        this.display2 = true
+        this.messageService.add({ severity: 'success', summary: 'Mensaje de éxito', detail: 'Inició la evaluación' });
+        this.evaluacionId = evaluacionId
+      },
+      (error: HttpErrorResponse) => {
+        this.messageService.add({ severity: 'error', summary: 'Mensaje de error', detail: error.error.status.error.messages });
+      }
+    );
   }
 
   marcarRespuesta(evaluacionRespuestaId, patronRespuesta) {

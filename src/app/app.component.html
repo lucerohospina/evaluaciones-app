@@ -24,6 +24,7 @@
             <th class="text-center">Id</th>
             <th class="text-center">Responsable</th>
             <th class="text-center">Estado</th>
+            <th class="text-center">Fecha Creacion</th>
             <th class="text-center">Usuario Creacion</th>
             <th class="text-center">Fecha/Hora Inicio</th>
             <th class="text-center">Fecha/Hora Fin</th>
@@ -39,7 +40,8 @@
             <td *ngIf="dat.estadoEvaluacion == 'R'">REGISTRADO</td>
             <td *ngIf="dat.estadoEvaluacion == 'I'">INICIADO</td>
             <td *ngIf="dat.estadoEvaluacion == 'F'">FINALIZADO</td>
-            <td >{{ dat.usuarioCreacion }}</td >
+            <td class="text-center">{{ dat.fechaCreacion | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+            <td>{{ dat.usuarioCreacion }}</td >
             <td class="text-center">{{ dat.fechaHoraInicio | date:'dd/MM/yyyy HH:mm:ss' }}</td>
             <td class="text-center">{{ dat.fechaHoraFin | date:'dd/MM/yyyy HH:mm:ss' }}</td>
             <td class="text-center">
@@ -164,3 +166,4 @@
     <button type="button" pButton icon="pi pi-check" label="Si" (click)="cd.accept()"></button>
   </p-footer>
 </p-confirmDialog>
+<p-toast></p-toast>
