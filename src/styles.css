@@ -5,3 +5,7 @@
 body .ui-dialog .ui-dialog-footer { text-align: center !important; }
 
 body .ui-paginator { background-color: #fff; border: none; }
+
+body .ui-dialog .ui-dialog-footer {
+    text-align: center !important;
+  }
