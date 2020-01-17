@@ -43,7 +43,7 @@ import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
     ConfirmDialogModule,
     ToastModule,
     TooltipModule,
-    Ng4LoadingSpinnerModule
+    Ng4LoadingSpinnerModule.forRoot()
   ],
   providers: [
     EvaluacionService,
