@@ -18,7 +18,6 @@ export class AppComponent {
   ResponsablesData: ResponsablesData[];
   display: boolean = false
   display2: boolean = false
-  //selectedResponsible: ResponsablesData
   selectedResponsible: string = ""
   EvaluacionesData: EvaluacionesData[]
   data: EvaluacionesData[]
@@ -59,12 +58,13 @@ export class AppComponent {
   crearEvaluacion() {
     this._evaluacionService.crearEvaluacion(this.selectedResponsible).subscribe(
       res => {
+        this._ng4LoadingSpinnerService.show();
         setTimeout(() => {
           this._evaluacionService.listarEvaluaciones(this.selectedResponsible).subscribe(evaluaciones => {
             this.data = evaluaciones['payload']['items']
           });
+          this.messageService.add({ severity: 'success', summary: 'Mensaje de éxito', detail: 'Evaluación ' + res['payload']['evaluacionId'] + ' creada correctamente' })
         }, 3000);
-        this.messageService.add({ severity: 'success', summary: 'Mensaje de éxito', detail: 'Evaluación ' + res['payload']['evaluacionId'] + ' creada correctamente' })
       },
       (error: HttpErrorResponse) => {
         this.messageService.add({ severity: 'error', summary: 'Mensaje de error', detail: error.error.status.error.messages })
