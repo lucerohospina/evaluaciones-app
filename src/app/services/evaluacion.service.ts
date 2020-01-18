@@ -14,13 +14,9 @@ export class EvaluacionService {
   //---------------- Properties---------------
   readonly rootUrl = 'http://10.240.132.45:8083/';
 
-  //---------------- Helper Methods---------------
   constructor(private http: HttpClient) { }
 
   //---------------- Http Methods---------------
-  listarEvaluaciones(servidorResponsableId): Observable<EvaluacionesData[]> {
-    return this.http.get<EvaluacionesData[]>(this.rootUrl + 'evaluacion/api/v1/responsables/' + servidorResponsableId + '/evaluaciones')
-  }
 
   verEvaluacion(evaluacionId): Observable<PreguntasData[]> {
     return this.http.get<PreguntasData[]>(this.rootUrl + 'evaluacion/api/v1/evaluaciones/' + evaluacionId)
@@ -98,6 +94,11 @@ export class EvaluacionService {
           }
         }
       })
+  }
+
+  // Obtiene las evaluaciones asignadas a un responsable
+  listarEvaluaciones(servidorResponsableId): Observable<EvaluacionesData[]> {
+    return this.http.get<EvaluacionesData[]>(this.rootUrl + 'evaluacion/api/v1/responsables/' + servidorResponsableId + '/evaluaciones')
   }
 
 }

@@ -1,22 +1,22 @@
-<nav class="navbar navbar-light navbar-bg-red py-3">
+<nav class="navbar navbar-light navbar-bg-red py-3 text-white">
   <a class="navbar-brand">
     <img src="../assets/images/logo.png" alt="logo" width="120">
   </a>
+  <h5 class="first">
+    Crud de Evaluaciones
+  </h5>
 </nav>
 <div class="container-fluid">
-  <div class="row mt-5">
-    <div class="col-12 text-center">
-      <select class="custom-select w-25" name="selectedResponsible" [(ngModel)]="selectedResponsible"
-        (change)="listarEvaluaciones()">
-        <option value="">Seleccione un responsable</option>
-        <option value="101">WILBER APCHO MONTES</option>
-        <option value="102">JOSE ANTONIO HUALLANCA AYALA</option>
-        <option value="103">MERLY EDITH ROSILLO LLACSAHUANGA</option>
-      </select>
-      <p-button class="ml-3" label="Nuevo" (onClick)="confirmarCrearEvaluacion()"></p-button>
-    </div>
+  <h5 class="first">
+    Servidor Responsable
+  </h5>
+  <p-dropdown [(ngModel)]="servidorResponsableId" optionLabel="name" [options]="responsables"
+    (onChange)="listarEvaluaciones($event)" placeholder="Seleccione" [showClear]="true">
+  </p-dropdown>
+  <div class="float-right">
+    <p-button icon="pi pi-plus" label="Nueva Evaluación" (onClick)="confirmarCrearEvaluacion()"></p-button>
   </div>
-  <div class="row my-5">
+  <div class="row my-2">
     <div class="col-12">
       <p-table [paginator]="true" [rows]="10" [value]="data">
         <ng-template pTemplate="header">
@@ -41,7 +41,7 @@
             <td *ngIf="dat.estadoEvaluacion == 'I'">INICIADO</td>
             <td *ngIf="dat.estadoEvaluacion == 'F'">FINALIZADO</td>
             <td class="text-center">{{ dat.fechaCreacion | date:'dd/MM/yyyy HH:mm:ss' }}</td>
-            <td>{{ dat.usuarioCreacion }}</td >
+            <td>{{ dat.usuarioCreacion }}</td>
             <td class="text-center">{{ dat.fechaHoraInicio | date:'dd/MM/yyyy HH:mm:ss' }}</td>
             <td class="text-center">{{ dat.fechaHoraFin | date:'dd/MM/yyyy HH:mm:ss' }}</td>
             <td class="text-center">
@@ -50,7 +50,7 @@
               <button type="button" (click)="confirmarIniciarEvaluacion(dat.evaluacionId)" class="pi pi-play mx-2"
                 [disabled]="dat.estadoEvaluacion != 'R'" pTooltip="Iniciar evaluación"></button>
               <button class="pi pi-trash" (click)="confirmarEliminarEvaluacion(dat.evaluacionId)"
-              [disabled]="dat.estadoEvaluacion != 'R'" type="button" pTooltip="Eliminar evaluación"></button>
+                [disabled]="dat.estadoEvaluacion != 'R'" type="button" pTooltip="Eliminar evaluación"></button>
             </td>
           </tr>
         </ng-template>
@@ -73,7 +73,7 @@
           <div class="row px-5 py-3">
             <div class="ui-g-12">
               A) <p-radioButton disabled name="{{dat.evaluacionRespuestaId}}" value="10000" label="{{dat.alternativa1}}"
-              [(ngModel)]="dat.helper" inputId="alternativa1">
+                [(ngModel)]="dat.helper" inputId="alternativa1">
               </p-radioButton>
             </div>
             <div class="ui-g-12">
@@ -98,22 +98,22 @@
             </div>
           </div>
           <div class="card-footer">
-              Respuesta Correcta:
-              <li class="d-inline-block" *ngIf="dat.solucion == '10000'">
-                A
-              </li>
-              <li class="d-inline-block" *ngIf="dat.solucion == '01000'">
-                B
-              </li>
-              <li class="d-inline-block" *ngIf="dat.solucion == '00100'">
-                C
-              </li>
-              <li class="d-inline-block" *ngIf="dat.solucion == '00010'">
-                D
-              </li>
-              <li class="d-inline-block" *ngIf="dat.solucion == '00001'">
-                E
-              </li>
+            Respuesta Correcta:
+            <li class="d-inline-block" *ngIf="dat.solucion == '10000'">
+              A
+            </li>
+            <li class="d-inline-block" *ngIf="dat.solucion == '01000'">
+              B
+            </li>
+            <li class="d-inline-block" *ngIf="dat.solucion == '00100'">
+              C
+            </li>
+            <li class="d-inline-block" *ngIf="dat.solucion == '00010'">
+              D
+            </li>
+            <li class="d-inline-block" *ngIf="dat.solucion == '00001'">
+              E
+            </li>
           </div>
         </div>
       </div>
@@ -122,7 +122,8 @@
 </p-dialog>
 
 <p-dialog header="Rendir Evaluación" [(visible)]="display2" [modal]="true" [style]="{'width': '50%'}">
-  <p-button label="Finalizar Evaluación" (onClick)="finalizarEvaluacion(evaluacionId)" [style]="{ 'position': 'fixed' }"></p-button>
+  <p-button label="Finalizar Evaluación" (onClick)="finalizarEvaluacion(evaluacionId)"
+    [style]="{ 'position': 'fixed' }"></p-button>
   <div class="container-fluid mt-4">
     <div class="row">
       <div class="col-12 col-md-8 offset-md-4">
