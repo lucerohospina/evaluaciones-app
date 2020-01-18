@@ -3,7 +3,8 @@ import { HttpClient } from '@angular/common/http'
 import { Observable } from 'rxjs'
 import { EvaluacionesData } from '../models/evaluaciones'
 import { PreguntasData } from '../models/preguntas'
-
+import { HttpHeaders } from '@angular/common/http';
+const headersJson = new HttpHeaders().set('Content-Type', 'application/json');
 @Injectable({
   providedIn: 'root'
 })
@@ -70,16 +71,33 @@ export class EvaluacionService {
   }
 
   finalizarEvaluacion(evaluacionId) {
-    return this.http.put<any>(this.rootUrl + 'evaluacion/api/v1/evaluaciones/fin', {
-      "trace": {
-        "traceId": evaluacionId
-      },
-      "payload": {
-        "evaluacionId": evaluacionId,
-        "usuarioModificacion": "APRIETO"
+    return this.http.put<any>(this.rootUrl + 'evaluacion/api/v1/evaluaciones/fin',
+      {
+        "trace": {
+          "traceId": evaluacionId
+        },
+        "payload": {
+          "evaluacionId": evaluacionId,
+          "usuarioModificacion": "APRIETO"
+        }
       }
-    }
     )
+  }
+
+  eliminarEvaluacion(evaluacionId) {
+    return this.http.request("delete", this.rootUrl + 'evaluacion/api/v1/evaluaciones',
+      {
+        headers: headersJson,
+        body: {
+          "trace": {
+            "traceId": evaluacionId
+          },
+          "payload": {
+            "evaluacionId": evaluacionId,
+            "usuarioModificacion": "APRIETO"
+          }
+        }
+      })
   }
 
 }

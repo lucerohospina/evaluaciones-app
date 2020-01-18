@@ -50,7 +50,7 @@
               <button type="button" (click)="confirmarIniciarEvaluacion(dat.evaluacionId)" class="pi pi-play mx-2"
                 [disabled]="dat.estadoEvaluacion != 'R'" pTooltip="Iniciar evaluación"></button>
               <button class="pi pi-trash" (click)="confirmarEliminarEvaluacion(dat.evaluacionId)"
-                type="button" pTooltip="Eliminar evaluación"></button>
+              [disabled]="dat.estadoEvaluacion != 'R'" type="button" pTooltip="Eliminar evaluación"></button>
             </td>
           </tr>
         </ng-template>

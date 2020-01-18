@@ -25,12 +25,12 @@ export class AppComponent {
   PreguntasData: PreguntasData[]
   data2: PreguntasData[]
   evaluacionId: string = ""
-  
-  constructor(private _evaluacionService: EvaluacionService, 
-              private confirmationService: ConfirmationService, 
-              private messageService: MessageService,
-              private _ng4LoadingSpinnerService: Ng4LoadingSpinnerService) { }
-  
+
+  constructor(private _evaluacionService: EvaluacionService,
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService,
+    private _ng4LoadingSpinnerService: Ng4LoadingSpinnerService) { }
+
   listarEvaluaciones(event) {
     this._evaluacionService.listarEvaluaciones(this.selectedResponsible).subscribe(res => {
       this.data = res['payload']['items']
@@ -59,7 +59,11 @@ export class AppComponent {
   crearEvaluacion() {
     this._evaluacionService.crearEvaluacion(this.selectedResponsible).subscribe(
       res => {
-        this._evaluacionService.listarEvaluaciones(this.selectedResponsible);
+        setTimeout(() => {
+          this._evaluacionService.listarEvaluaciones(this.selectedResponsible).subscribe(evaluaciones => {
+            this.data = evaluaciones['payload']['items']
+          });
+        }, 3000);
         this.messageService.add({ severity: 'success', summary: 'Mensaje de éxito', detail: 'Evaluación ' + res['payload']['evaluacionId'] + ' creada correctamente' })
       },
       (error: HttpErrorResponse) => {
@@ -119,7 +123,17 @@ export class AppComponent {
   }
 
   eliminarEvaluacion(evaluacionId) {
-    console.log('Evaluación eliminada correctamente');
+    this._evaluacionService.eliminarEvaluacion(evaluacionId).subscribe(
+      res => {
+        this.messageService.add({ severity: 'success', summary: 'Mensaje de éxito', detail: 'Se eliminó correctamente la evaluación ' + evaluacionId });
+        this._evaluacionService.listarEvaluaciones(this.selectedResponsible).subscribe(evaluaciones => {
+          this.data = evaluaciones['payload']['items']
+        });
+      },
+      (error: HttpErrorResponse) => {
+        this.messageService.add({ severity: 'error', summary: 'Mensaje de error', detail: error.error.status.error.messages });
+      }
+    );
   }
 
 }
