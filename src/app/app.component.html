@@ -6,59 +6,100 @@
     Crud de Evaluaciones
   </h5>
 </nav>
-<div class="container-fluid">
-  <h5 class="first">
-    Servidor Responsable
-  </h5>
-  <p-dropdown [(ngModel)]="servidorResponsableId" optionLabel="name" [options]="responsables"
-    (onChange)="listarEvaluaciones($event)" placeholder="Seleccione" [showClear]="true">
-  </p-dropdown>
-  <div class="float-right">
-    <p-button icon="pi pi-plus" label="Nueva Evaluación" (onClick)="confirmarCrearEvaluacion()"></p-button>
+<div class="p-grid mx-1">
+  <div class="p-col-12 p-xl-3 p-lg-3 py-0 mt-2">
+    <label class="font-weight-bold">
+      Servidor Responsable
+    </label>
+    <p-dropdown [style]="{'width':'100%'}" [(ngModel)]="servidorResponsableId" name="servidorResponsableId"
+      optionLabel="name" [options]="responsables" (onChange)="listarEvaluaciones($event)" placeholder="Seleccione"
+      [showClear]="true">
+    </p-dropdown>
   </div>
-  <div class="row my-2">
-    <div class="col-12">
-      <p-table [paginator]="true" [rows]="10" [value]="data">
-        <ng-template pTemplate="header">
-          <tr>
-            <th class="text-center" width="7%">Id</th>
-            <th class="text-center">Responsable</th>
-            <th class="text-center" width="10%">Estado</th>
-            <th class="text-center">Fecha Creacion</th>
-            <th class="text-center" width="10%">Usuario Creacion</th>
-            <th class="text-center">Fecha/Hora Inicio</th>
-            <th class="text-center">Fecha/Hora Fin</th>
-            <th class="text-center">Acciones</th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-dat>
-          <tr>
-            <td class="text-center">{{ dat.evaluacionId }}</td>
-            <td *ngIf="dat.servidorResponsableId == '101'">WILBER APCHO MONTES</td>
-            <td *ngIf="dat.servidorResponsableId == '102'">JOSE ANTONIO HUALLANCA AYALA</td>
-            <td *ngIf="dat.servidorResponsableId == '103'">MERLY EDITH ROSILLO LLACSAHUANGA</td>
-            <td *ngIf="dat.estadoEvaluacion == 'R'">REGISTRADO</td>
-            <td *ngIf="dat.estadoEvaluacion == 'I'">INICIADO</td>
-            <td *ngIf="dat.estadoEvaluacion == 'F'">FINALIZADO</td>
-            <td class="text-center">{{ dat.fechaCreacion | date:'dd/MM/yyyy HH:mm:ss' }}</td>
-            <td>{{ dat.usuarioCreacion }}</td>
-            <td class="text-center">{{ dat.fechaHoraInicio | date:'dd/MM/yyyy HH:mm:ss' }}</td>
-            <td class="text-center">{{ dat.fechaHoraFin | date:'dd/MM/yyyy HH:mm:ss' }}</td>
-            <td class="text-center">
-              <button type="button" (click)="verEvaluacion(dat.evaluacionId)" class="pi pi-eye"
-                [disabled]="dat.estadoEvaluacion != 'F'" pTooltip="Ver evaluación"></button>
-              <button type="button" (click)="confirmarIniciarEvaluacion(dat.evaluacionId)" class="pi pi-play mx-2"
-                [disabled]="dat.estadoEvaluacion != 'R'" pTooltip="Iniciar evaluación"></button>
-              <button class="pi pi-trash" (click)="confirmarEliminarEvaluacion(dat.evaluacionId)"
-                [disabled]="dat.estadoEvaluacion != 'R'" type="button" pTooltip="Eliminar evaluación"></button>
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
-    </div>
+  <div class="p-col-0 p-xl-6 p-lg-6 py-0">
+  </div>
+  <div class="p-col-12 p-xl-3 p-lg-3 py-0 mb-2">
+    <label>
+    </label>
+    <button class="btn-block ui-button-primary" (click)="confirmarCrearEvaluacion($event)" [disabled]="disabledNuevo"
+      icon="pi pi-plus" iconPos="right" label="Nueva Evaluación" pButton type="button"></button>
   </div>
 </div>
-
+<div class="p-col-12">
+  <p-table [paginator]="true" [responsive]="true" [rows]="10" [value]="data">
+    <ng-template pTemplate="caption">
+      <div style="text-align: right">
+        <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+        <input type="text" pInputText size="50" placeholder="Global Filter"
+          (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="text-center ui-p-1">
+          Id
+        </th>
+        <th class="text-center ui-p-1">
+          Inicio
+        </th>
+        <th class="text-center ui-p-1">
+          Fin
+        </th>
+        <th class="ui-p-5">
+          Usuario Crea
+        </th>
+        <th class="text-center ui-p-4">
+          Fecha Crea
+        </th>
+        <th class="text-center ui-p-6">
+          Estado
+        </th>
+        <th class="text-center ui-p-1">
+          Acciones
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-dat>
+      <tr>
+        <td class="text-center ui-p-1">
+          {{ dat.evaluacionId }}
+        </td>
+        <td class="text-center ui-p-1">
+          {{ dat.fechaHoraInicio | date:'dd/MM/yyyy HH:mm:ss' }}
+        </td>
+        <td class="text-center ui-p-1">
+          {{ dat.fechaHoraFin | date:'dd/MM/yyyy HH:mm:ss' }}
+        </td>
+        <td class="ui-p-5">
+          {{ dat.usuarioCreacion }}
+        </td>
+        <td class="text-center ui-p-4">
+          {{ dat.fechaCreacion | date:'dd/MM/yyyy HH:mm:ss' }}
+        </td>
+        <td class="text-center ui-p-6" *ngIf="dat.estadoEvaluacion == 'R'">
+          REGISTRADO
+        </td>
+        <td class="text-center ui-p-6" *ngIf="dat.estadoEvaluacion == 'I'">
+          INICIADO
+        </td>
+        <td class="text-center ui-p-6" *ngIf="dat.estadoEvaluacion == 'F'">
+          FINALIZADO
+        </td>
+        <td class="text-center ui-p-1">
+          <button class="ui-button-success mr-1" (click)="verEvaluacion(dat.evaluacionId)"
+            [disabled]="dat.estadoEvaluacion != 'F'" icon="pi pi-eye" pButton pTooltip="Ver evaluación">
+          </button>
+          <button class="ui-button-warning mr-1" (click)="confirmarIniciarEvaluacion(dat.evaluacionId)"
+            [disabled]="dat.estadoEvaluacion != 'R'" icon="pi pi-play" pButton pTooltip="Iniciar evaluación">
+          </button>
+          <button class="ui-button-danger" (click)="confirmarEliminarEvaluacion(dat.evaluacionId)"
+            [disabled]="dat.estadoEvaluacion != 'R'" icon="pi pi-trash" pButton pTooltip="Eliminar evaluación">
+          </button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
 <p-dialog [(visible)]="display" [modal]="true" [style]="{'width': '50%'}">
   <p-header>
     <h5 class="font-weight-bold d-inline-block">Ver Resultados</h5>

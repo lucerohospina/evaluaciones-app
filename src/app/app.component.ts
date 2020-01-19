@@ -4,7 +4,6 @@ import { EvaluacionesData } from './models/evaluaciones'
 import { PreguntasData } from './models/preguntas'
 import { ConfirmationService } from 'primeng/api'
 import { MessageService } from 'primeng/api'
-import { HttpErrorResponse } from '@angular/common/http'
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner'
 
 interface Responsable {
@@ -21,7 +20,8 @@ interface Responsable {
 
 export class AppComponent {
   responsables: Responsable[];
-  servidorResponsableId: Responsable;
+  disabledNuevo: boolean = true
+  servidorResponsableId: "";
   display: boolean = false
   display2: boolean = false
   EvaluacionesData: EvaluacionesData[]
@@ -39,6 +39,36 @@ export class AppComponent {
       { name: 'JOSE ANTONIO HUALLANCA AYALA', code: '102' },
       { name: 'MERLY EDITH ROSILLO LLACSAHUANGA', code: '103' }
     ];
+  }
+
+  // Obtiene las evaluaciones asignadas a un responsable
+  listarEvaluaciones(event) {
+    if (event.value == null) {
+      this.disabledNuevo = true
+      this.data = null
+    }
+    else {
+      this.disabledNuevo = false
+      this._listarEvaluaciones(event.value.code)
+    }
+  }
+
+  // Obtiene las evaluaciones asignadas a un responsable
+  _listarEvaluaciones(servidorResponsableId) {
+    this._evaluacionService.listarEvaluaciones(servidorResponsableId).subscribe(
+      next => {
+        this._ng4LoadingSpinnerService.show();
+        this.data = next['payload']['items']
+
+      },
+      error => {
+        this._messageService(error.error.status.error.messages, 'error', 'Mensaje de error')
+      },
+      () => {
+        this._ng4LoadingSpinnerService.hide();
+        this.servidorResponsableId = servidorResponsableId
+      }
+    );
   }
 
   // Confirma la creación de una evaluación
@@ -67,6 +97,7 @@ export class AppComponent {
     );
   }
 
+  // Confirma la inicialización de una evaluación
   confirmarIniciarEvaluacion(evaluacionId) {
     this.confirmationService.confirm({
       message: 'Desea iniciar la evaluación?',
@@ -76,24 +107,34 @@ export class AppComponent {
     });
   }
 
+  // Inicializa una evaluación
   iniciarEvaluacion(evaluacionId) {
     this._evaluacionService.iniciarEvaluacion(evaluacionId).subscribe(
-      res => {
-        this.data2 = res['payload']['items']
+      next => {
+        this.data2 = next['payload']['items']
         this.display2 = true
-        this.messageService.add({ severity: 'success', summary: 'Mensaje de éxito', detail: 'Inició la evaluación' });
+        this._messageService('Inició la evaluación', 'success', 'Mensaje de éxito')
         this.evaluacionId = evaluacionId
       },
-      (error: HttpErrorResponse) => {
-        this.messageService.add({ severity: 'error', summary: 'Mensaje de error', detail: error.error.status.error.messages });
+      error => {
+        this._messageService(error.error.status.error.messages, 'error', 'Mensaje de error')
       }
     );
   }
 
+  // Marca una respuesta
   marcarRespuesta(evaluacionRespuestaId, patronRespuesta) {
-    this._evaluacionService.marcarRespuesta(evaluacionRespuestaId, patronRespuesta).subscribe();
+    this._evaluacionService.marcarRespuesta(evaluacionRespuestaId, patronRespuesta).subscribe(
+      next => {
+        console.log("Respuesta Marcada");
+      },
+      error => {
+        this._messageService(error.error.status.error.messages, 'error', 'Mensaje de error')
+      }
+    );
   }
 
+  // Confirma la finalización de una evaluación
   confirmarFinalizarEvaluacion(evaluacionId) {
     this.confirmationService.confirm({
       message: 'Desea finalizar la evaluación?',
@@ -103,11 +144,19 @@ export class AppComponent {
     });
   }
 
+  // Finaliza una evaluación
   finalizarEvaluacion(evaluacionId) {
-    this._evaluacionService.finalizarEvaluacion(evaluacionId).subscribe();
-    console.log('Evaluación finalizada correctamente');
+    this._evaluacionService.finalizarEvaluacion(evaluacionId).subscribe(
+      next => {
+        this._messageService('Finalizó la evaluación', 'success', 'Mensaje de éxito')
+      },
+      error => {
+        this._messageService(error.error.status.error.messages, 'error', 'Mensaje de error')
+      }
+    );
   }
 
+  // Confirma la eliminación de una evaluación
   confirmarEliminarEvaluacion(evaluacionId) {
     this.confirmationService.confirm({
       message: 'Desea eliminar la evaluación?',
@@ -117,44 +166,32 @@ export class AppComponent {
     });
   }
 
-  verEvaluacion(evaluacionId) {
-    this._evaluacionService.verEvaluacion(evaluacionId).subscribe(res => {
-      this.data2 = res['payload']['items']
-      res['payload']['items'].forEach(element => {
-        element['helper'] = element['respuesta'];
-      });
-    });
-    this.display = true
-  }
-
   // Eliminar Evaluacion
   eliminarEvaluacion(evaluacionId) {
     this._evaluacionService.eliminarEvaluacion(evaluacionId).subscribe(
-      res => {
-        this.messageService.add({ severity: 'success', summary: 'Mensaje de éxito', detail: 'Se eliminó correctamente la evaluación ' + evaluacionId });
+      next => {
+        this._messageService('Se eliminó correctamente la evaluación ' + evaluacionId, 'success', 'Mensaje de éxito')
         this._listarEvaluaciones(this.servidorResponsableId)
       },
-      (error: HttpErrorResponse) => {
-        this.messageService.add({ severity: 'error', summary: 'Mensaje de error', detail: error.error.status.error.messages });
+      error => {
+        this._messageService(error.error.status.error.messages, 'error', 'Mensaje de error')
       }
     );
   }
 
-  // Obtiene las evaluaciones asignadas a un responsable
-  listarEvaluaciones(event) {
-    if (event.value == null) {
-      this.data = null
-    }
-    else {
-      this._listarEvaluaciones(event.value.code)
-    }
-  }
-
-  // Obtiene las evaluaciones asignadas a un responsable
-  _listarEvaluaciones(servidorResponsableId) {
-    this._evaluacionService.listarEvaluaciones(servidorResponsableId).subscribe(data => {
-      this.data = data['payload']['items']
-    });
+  verEvaluacion(evaluacionId) {
+    this._evaluacionService.verEvaluacion(evaluacionId).subscribe(
+      next => {
+        this.data2 = next['payload']['items']
+        next['payload']['items'].forEach(element => {
+          element['helper'] = element['respuesta'];
+        });
+      },
+      error => {
+        this._messageService(error.error.status.error.messages, 'error', 'Mensaje de error')
+      }
+    );
+    this.display = true
   }
 
   _messageService(detail, severity, summary) {

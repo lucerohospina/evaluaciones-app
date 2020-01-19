@@ -24,6 +24,7 @@
     "jquery": "^3.4.1",
     "ng4-loading-spinner": "^1.2.3",
     "popper.js": "^1.16.0",
+    "primeflex": "^1.0.0",
     "primeicons": "^2.0.0",
     "primeng": "^9.0.0-rc.2",
     "rxjs": "~6.4.0",
