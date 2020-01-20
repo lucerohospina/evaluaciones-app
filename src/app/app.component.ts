@@ -21,7 +21,7 @@ interface Responsable {
 export class AppComponent {
   responsables: Responsable[];
   disabledNuevo: boolean = true
-  servidorResponsableId: "";
+  servidorResponsableId2: "";
   display: boolean = false
   display2: boolean = false
   EvaluacionesData: EvaluacionesData[]
@@ -57,7 +57,6 @@ export class AppComponent {
   _listarEvaluaciones(servidorResponsableId) {
     this._evaluacionService.listarEvaluaciones(servidorResponsableId).subscribe(
       next => {
-        this._ng4LoadingSpinnerService.show();
         this.data = next['payload']['items']
 
       },
@@ -65,8 +64,7 @@ export class AppComponent {
         this._messageService(error.error.status.error.messages, 'error', 'Mensaje de error')
       },
       () => {
-        this._ng4LoadingSpinnerService.hide();
-        this.servidorResponsableId = servidorResponsableId
+        this.servidorResponsableId2 = servidorResponsableId
       }
     );
   }
@@ -83,12 +81,12 @@ export class AppComponent {
 
   // Crea una evaluación
   crearEvaluacion() {
-    this._evaluacionService.crearEvaluacion(this.servidorResponsableId).subscribe(
+    this._evaluacionService.crearEvaluacion(this.servidorResponsableId2).subscribe(
       next => {
         this._ng4LoadingSpinnerService.show();
         setTimeout(() => {
           this._messageService('Evaluación ' + next['payload']['evaluacionId'] + ' creada correctamente', 'success', 'Mensaje de éxito')
-          this._listarEvaluaciones(this.servidorResponsableId)
+          this._listarEvaluaciones(this.servidorResponsableId2)
         }, 3000);
       },
       error => {
@@ -148,7 +146,9 @@ export class AppComponent {
   finalizarEvaluacion(evaluacionId) {
     this._evaluacionService.finalizarEvaluacion(evaluacionId).subscribe(
       next => {
+        this.display2 = false
         this._messageService('Finalizó la evaluación', 'success', 'Mensaje de éxito')
+        this._listarEvaluaciones(this.servidorResponsableId2)
       },
       error => {
         this._messageService(error.error.status.error.messages, 'error', 'Mensaje de error')
@@ -171,7 +171,7 @@ export class AppComponent {
     this._evaluacionService.eliminarEvaluacion(evaluacionId).subscribe(
       next => {
         this._messageService('Se eliminó correctamente la evaluación ' + evaluacionId, 'success', 'Mensaje de éxito')
-        this._listarEvaluaciones(this.servidorResponsableId)
+        this._listarEvaluaciones(this.servidorResponsableId2)
       },
       error => {
         this._messageService(error.error.status.error.messages, 'error', 'Mensaje de error')
