@@ -11,7 +11,7 @@
     <label class="font-weight-bold">
       Servidor Responsable:
     </label>
-    <p-dropdown [style]="{'width':'100%'}" [(ngModel)]="servidorResponsableId" name="servidorResponsableId"
+    <p-dropdown [style]="{'width':'100%'}" [(ngModel)]="servidorResponsableId2" name="servidorResponsableId"
       optionLabel="name" [options]="responsables" (onChange)="listarEvaluaciones($event)" placeholder="Seleccione"
       [showClear]="true">
     </p-dropdown>
@@ -21,7 +21,7 @@
   <div class="p-col-12 p-xl-3 p-lg-3 py-0 mb-2">
     <label>
     </label>
-    <button class="btn-block ui-button-primary" (click)="confirmarCrearEvaluacion($event)" [disabled]="disabledNuevo"
+    <button class="btn-block ui-button-primary" (click)="confirmarCrearEvaluacion()" [disabled]="disabledNuevo"
       icon="pi pi-plus" iconPos="right" label="Nueva Evaluación" pButton type="button"></button>
   </div>
 </div>
