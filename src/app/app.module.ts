@@ -22,10 +22,14 @@ import { MessageService } from 'primeng/api';
 import { AppComponent } from './app.component';
 
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
+import { TableComponent } from './components/table/table.component';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    TableComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     BrowserModule,

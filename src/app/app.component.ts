@@ -19,15 +19,13 @@ interface Responsable {
 
 
 export class AppComponent {
+  data: EvaluacionesData[]
+  EvaluacionesData: EvaluacionesData[]
+  data2: PreguntasData[]
+  PreguntasData: PreguntasData[]
+  servidorResponsableId2: EvaluacionesData[]
   responsables: Responsable[];
   disabledNuevo: boolean = true
-  servidorResponsableId2: "";
-  display: boolean = false
-  display2: boolean = false
-  EvaluacionesData: EvaluacionesData[]
-  data: EvaluacionesData[]
-  PreguntasData: PreguntasData[]
-  data2: PreguntasData[]
   evaluacionId: string = ""
 
   constructor(private _evaluacionService: EvaluacionService,
@@ -58,13 +56,25 @@ export class AppComponent {
     this._evaluacionService.listarEvaluaciones(servidorResponsableId).subscribe(
       next => {
         this.data = next['payload']['items']
-
       },
       error => {
         this._messageService(error.error.status.error.messages, 'error', 'Mensaje de error')
-      },
+      }
+      ,
       () => {
         this.servidorResponsableId2 = servidorResponsableId
+      }
+    );
+  }
+
+  // Obtiene las evaluaciones asignadas a un responsable
+  _listarEvaluaciones2() {
+    this._evaluacionService.listarEvaluaciones(this.servidorResponsableId2).subscribe(
+      next => {
+        this.data = next['payload']['items']
+      },
+      error => {
+        this._messageService(error.error.status.error.messages, 'error', 'Mensaje de error')
       }
     );
   }
@@ -94,106 +104,7 @@ export class AppComponent {
       }
     );
   }
-
-  // Confirma la inicialización de una evaluación
-  confirmarIniciarEvaluacion(evaluacionId) {
-    this.confirmationService.confirm({
-      message: 'Desea iniciar la evaluación?',
-      accept: () => {
-        this.iniciarEvaluacion(evaluacionId);
-      }
-    });
-  }
-
-  // Inicializa una evaluación
-  iniciarEvaluacion(evaluacionId) {
-    this._evaluacionService.iniciarEvaluacion(evaluacionId).subscribe(
-      next => {
-        this.data2 = next['payload']['items']
-        this.display2 = true
-        this._messageService('Inició la evaluación', 'success', 'Mensaje de éxito')
-        this.evaluacionId = evaluacionId
-      },
-      error => {
-        this._messageService(error.error.status.error.messages, 'error', 'Mensaje de error')
-      }
-    );
-  }
-
-  // Marca una respuesta
-  marcarRespuesta(evaluacionRespuestaId, patronRespuesta) {
-    this._evaluacionService.marcarRespuesta(evaluacionRespuestaId, patronRespuesta).subscribe(
-      next => {
-        console.log("Respuesta Marcada");
-      },
-      error => {
-        this._messageService(error.error.status.error.messages, 'error', 'Mensaje de error')
-      }
-    );
-  }
-
-  // Confirma la finalización de una evaluación
-  confirmarFinalizarEvaluacion(evaluacionId) {
-    this.confirmationService.confirm({
-      message: 'Desea finalizar la evaluación?',
-      accept: () => {
-        this.finalizarEvaluacion(evaluacionId);
-      }
-    });
-  }
-
-  // Finaliza una evaluación
-  finalizarEvaluacion(evaluacionId) {
-    this._evaluacionService.finalizarEvaluacion(evaluacionId).subscribe(
-      next => {
-        this.display2 = false
-        this._messageService('Finalizó la evaluación', 'success', 'Mensaje de éxito')
-        this._listarEvaluaciones(this.servidorResponsableId2)
-      },
-      error => {
-        this._messageService(error.error.status.error.messages, 'error', 'Mensaje de error')
-      }
-    );
-  }
-
-  // Confirma la eliminación de una evaluación
-  confirmarEliminarEvaluacion(evaluacionId) {
-    this.confirmationService.confirm({
-      message: 'Desea eliminar la evaluación?',
-      accept: () => {
-        this.eliminarEvaluacion(evaluacionId);
-      }
-    });
-  }
-
-  // Eliminar Evaluacion
-  eliminarEvaluacion(evaluacionId) {
-    this._evaluacionService.eliminarEvaluacion(evaluacionId).subscribe(
-      next => {
-        this._messageService('Se eliminó correctamente la evaluación ' + evaluacionId, 'success', 'Mensaje de éxito')
-        this._listarEvaluaciones(this.servidorResponsableId2)
-      },
-      error => {
-        this._messageService(error.error.status.error.messages, 'error', 'Mensaje de error')
-      }
-    );
-  }
-
-  verEvaluacion(evaluacionId) {
-    this._evaluacionService.verEvaluacion(evaluacionId).subscribe(
-      next => {
-        this.data2 = next['payload']['items']
-        next['payload']['items'].forEach(element => {
-          element['helper'] = element['respuesta'];
-        });
-      },
-      error => {
-        this._messageService(error.error.status.error.messages, 'error', 'Mensaje de error')
-      }
-    );
-    this.display = true
-  }
-
+  
   _messageService(detail, severity, summary) {
     this.messageService.add(
       {
