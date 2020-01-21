@@ -29,7 +29,6 @@ export class TableComponent implements OnInit {
               private messageService: MessageService) { }
 
   ngOnInit() {
-    console.log('desde tabla:' + this.servidorResponsableId2)
   }
 
   // Inicializa una evaluación

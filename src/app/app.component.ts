@@ -23,10 +23,11 @@ export class AppComponent {
   EvaluacionesData: EvaluacionesData[]
   data2: PreguntasData[]
   PreguntasData: PreguntasData[]
-  servidorResponsableId2: EvaluacionesData[]
+  servidorResponsableId2: EvaluacionesData[] = null
   responsables: Responsable[];
   disabledNuevo: boolean = true
   evaluacionId: string = ""
+  servidorSelected: number = null
 
   constructor(private _evaluacionService: EvaluacionService,
     private confirmationService: ConfirmationService,
@@ -47,13 +48,13 @@ export class AppComponent {
     }
     else {
       this.disabledNuevo = false
-      this._listarEvaluaciones(event.value.code)
+      this._listarEvaluaciones(event.value)
     }
   }
 
   // Obtiene las evaluaciones asignadas a un responsable
   _listarEvaluaciones(servidorResponsableId) {
-    this._evaluacionService.listarEvaluaciones(servidorResponsableId).subscribe(
+    this._evaluacionService.listarEvaluaciones(servidorResponsableId.code).subscribe(
       next => {
         this.data = next['payload']['items']
       },
@@ -63,13 +64,14 @@ export class AppComponent {
       ,
       () => {
         this.servidorResponsableId2 = servidorResponsableId
+        this.servidorSelected = servidorResponsableId.code
       }
     );
   }
 
   // Obtiene las evaluaciones asignadas a un responsable
   _listarEvaluaciones2() {
-    this._evaluacionService.listarEvaluaciones(this.servidorResponsableId2).subscribe(
+    this._evaluacionService.listarEvaluaciones(this.servidorSelected).subscribe(
       next => {
         this.data = next['payload']['items']
       },
@@ -91,7 +93,7 @@ export class AppComponent {
 
   // Crea una evaluación
   crearEvaluacion() {
-    this._evaluacionService.crearEvaluacion(this.servidorResponsableId2).subscribe(
+    this._evaluacionService.crearEvaluacion(this.servidorSelected).subscribe(
       next => {
         this._ng4LoadingSpinnerService.show();
         setTimeout(() => {
