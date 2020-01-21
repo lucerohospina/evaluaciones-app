@@ -7,8 +7,7 @@ import { MessageService } from 'primeng/api'
 
 @Component({
   selector: 'app-table',
-  templateUrl: './table.component.html',
-  styleUrls: ['./table.component.css']
+  templateUrl: './table.component.html'
 })
 export class TableComponent implements OnInit {
 
