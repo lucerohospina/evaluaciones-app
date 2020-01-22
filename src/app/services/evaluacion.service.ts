@@ -12,7 +12,7 @@ const headersJson = new HttpHeaders().set('Content-Type', 'application/json');
 export class EvaluacionService {
 
   //---------------- Properties---------------
-  readonly rootUrl = 'http://10.240.132.45:8083/'; //'http://localhost:8080/';
+  readonly rootUrl = 'http://localhost:8080/'; //'http://10.240.132.45:8083/';
 
   constructor(private http: HttpClient) { }
 
